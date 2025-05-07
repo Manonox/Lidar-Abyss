@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://4v6b220vui2u"]
+[gd_scene load_steps=9 format=3 uid="uid://4v6b220vui2u"]
 
+[ext_resource type="Script" uid="uid://cjecis25qwibh" path="res://main.gd" id="1_lquwl"]
 [ext_resource type="PackedScene" uid="uid://dj26sacnhty4r" path="res://addons/devblocks/blocks/basic_block.tscn" id="1_q6tmh"]
 [ext_resource type="PackedScene" uid="uid://bbue6f8qtloey" path="res://character.tscn" id="2_gf5t0"]
 [ext_resource type="PackedScene" uid="uid://cdcmosuf4r5fc" path="res://lidar_manager.tscn" id="3_wnlqg"]
 [ext_resource type="Script" uid="uid://dwx0d8755ii2r" path="res://fps_counter.gd" id="4_rmfbj"]
+[ext_resource type="Texture2D" uid="uid://8b1vtdhm6bhl" path="res://Mouse_Left_Key_Dark.png" id="6_7mycd"]
 
 [sub_resource type="Environment" id="Environment_hcmro"]
 background_mode = 2
@@ -24,6 +26,7 @@ outline_size = 3
 outline_color = Color(0, 0, 0, 1)
 
 [node name="Main" type="Node"]
+script = ExtResource("1_lquwl")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_hcmro")
@@ -84,5 +87,17 @@ offset_bottom = 23.0
 text = "FPS: 0"
 label_settings = SubResource("LabelSettings_abupw")
 script = ExtResource("4_rmfbj")
+
+[node name="MouseTut" type="CenterContainer" parent="."]
+modulate = Color(1, 1, 1, 0.247059)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="MouseTut"]
+layout_mode = 2
+texture = ExtResource("6_7mycd")
 
 [connection signal="ray_requested" from="Character" to="LidarManager" method="cast"]
