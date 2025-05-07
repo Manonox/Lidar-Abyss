@@ -1,0 +1,78 @@
+[gd_scene load_steps=9 format=3 uid="uid://cdcmosuf4r5fc"]
+
+[ext_resource type="Script" uid="uid://bs4v6ws0cie3" path="res://lidar_manager.gd" id="1_ssa0g"]
+[ext_resource type="Shader" uid="uid://dvs7qxfahqfof" path="res://empty.gdshader" id="2_64nwm"]
+
+[sub_resource type="Environment" id="Environment_0mhhq"]
+background_energy_multiplier = 0.0
+ambient_light_source = 1
+reflected_light_source = 1
+glow_intensity = 8.0
+glow_strength = 0.2
+glow_blend_mode = 0
+glow_hdr_threshold = 0.0
+glow_hdr_scale = 0.0
+adjustment_brightness = 0.16
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ykdn3"]
+render_priority = 0
+shader = ExtResource("2_64nwm")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_hds6j"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bs505"]
+render_priority = 0
+shader = ExtResource("2_64nwm")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_jhqug"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_yah0q"]
+viewport_path = NodePath("SubViewport")
+
+[node name="LidarManager" type="Node3D"]
+script = ExtResource("1_ssa0g")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+unique_name_in_owner = true
+
+[node name="Camera" type="Camera3D" parent="SubViewport"]
+unique_name_in_owner = true
+top_level = true
+cull_mask = 2
+environment = SubResource("Environment_0mhhq")
+current = true
+fov = 37.8493
+
+[node name="LiveMeshInstance" type="MeshInstance3D" parent="SubViewport"]
+unique_name_in_owner = true
+layers = 2
+sorting_offset = 1e+08
+material_override = SubResource("ShaderMaterial_ykdn3")
+cast_shadow = 0
+ignore_occlusion_culling = true
+gi_mode = 0
+mesh = SubResource("ArrayMesh_hds6j")
+skeleton = NodePath("../..")
+
+[node name="CachedMeshInstance" type="MeshInstance3D" parent="SubViewport"]
+unique_name_in_owner = true
+layers = 2
+sorting_offset = 1e+08
+material_override = SubResource("ShaderMaterial_bs505")
+cast_shadow = 0
+custom_aabb = AABB(-100000, -100000, -100000, 200000, 200000, 200000)
+gi_mode = 0
+mesh = SubResource("ArrayMesh_jhqug")
+skeleton = NodePath("../..")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+anchors_preset = -1
+anchor_right = 0.381076
+anchor_bottom = 0.395062
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("ViewportTexture_yah0q")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true

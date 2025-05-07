@@ -1,0 +1,73 @@
+[gd_scene load_steps=11 format=3 uid="uid://bbue6f8qtloey"]
+
+[ext_resource type="Script" uid="uid://cr81kj15l5nfi" path="res://character.gd" id="1_dpvn0"]
+[ext_resource type="Script" uid="uid://dwsvy7ocp3sje" path="res://movement_properties.gd" id="2_2l3ds"]
+[ext_resource type="Script" uid="uid://dq6oxsoi27u80" path="res://lidar_properties.gd" id="3_x55g8"]
+[ext_resource type="Shader" uid="uid://bljdtaiys0k6r" path="res://lidar_blend.gdshader" id="4_jjbhn"]
+
+[sub_resource type="Resource" id="Resource_bsr1r"]
+script = ExtResource("2_2l3ds")
+speed = 10.0
+acceleration = 10.0
+gravity = 10.0
+stopspeed = 0.6
+friction = 8.0
+
+[sub_resource type="Resource" id="Resource_n15ir"]
+script = ExtResource("3_x55g8")
+rate = 10000.0
+scale = 0.04
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2mjg5"]
+radius = 0.2
+height = 1.8
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tef42"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("4_jjbhn")
+shader_parameter/bloom_threshold = 0.0
+shader_parameter/bloom_intensity = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_oscd4"]
+material = SubResource("ShaderMaterial_tef42")
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_xdm7r"]
+radius = 0.2
+height = 1.8
+
+[node name="Character" type="CharacterBody3D"]
+script = ExtResource("1_dpvn0")
+movement_properties = SubResource("Resource_bsr1r")
+lidar_properties = SubResource("Resource_n15ir")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_2mjg5")
+
+[node name="Interpolated" type="Node3D" parent="."]
+unique_name_in_owner = true
+top_level = true
+
+[node name="Camera" type="Camera3D" parent="Interpolated"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+cull_mask = 1048573
+fov = 90.0
+
+[node name="LidarBlend" type="MeshInstance3D" parent="Interpolated/Camera"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+cast_shadow = 0
+extra_cull_margin = 16384.0
+ignore_occlusion_culling = true
+gi_mode = 0
+mesh = SubResource("QuadMesh_oscd4")
+skeleton = NodePath("../..")
+
+[node name="Mesh" type="MeshInstance3D" parent="Interpolated"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_xdm7r")
